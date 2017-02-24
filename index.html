@@ -1,0 +1,131 @@
+<!--COMENTARIOS-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>CATALOGO DE SERVICIOS</title>
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			/*******EVENTO PARA REGISTRAR SERVICIOS********/
+			$("#btnGuardar").tap(function(){
+				
+				var nom=$("#Nombre").val();
+				var dir=$("#Direccion").val();
+				var rfc=$("#RFC").val();
+				var tel=$("#Telefono").val();
+				var clasif=$("#clasificacion").val();
+				var foto="img/fotos/foto1.png";
+				var lat=$("#lalitud").val();
+				var longit=$("#longitud").val();
+
+				$.ajax({
+					type: "POST",
+					url: "http://www.juanamovil.esy.es/Guardar.php",
+					data: "Nom="+nom+"&Dir="+dir+"&Rfc="+rfc+"&Tel="+tel+"&Clasif="+clasif+"&Foto="+foto+"&Lat="+lat+"&Long="+longit,
+					success: function respuesta(datos){
+						alert(datos);
+					}
+				});
+			});
+						/***********************EVENTO PARA CONSULTA**************/
+			$("#btnConsultar").tap(function(){
+				
+				$.ajax({
+					type:"POST",
+					url:"http://www.juanamovil.esy.es/Consulta.php",
+					data:"",
+					success:function ConsultaTodo(datos){
+						var reg=$.parseJSON(datos);
+						var contenido=$("#datosTodos");
+                        contenido.html("<table border='1' id='tb1'><th>Id</th><th>Nombre</th><th>Direccion</th><th>Foto</th><th>Lat</th><th>Long</th>");
+                        var fila=$("#tb1");
+                        for(var i in reg){
+                        	fila.append("<tr><td>"+reg[i].Id_Servicios+"</td><td>"+reg[i].Nombre_servicio+"</td><td>"+reg[i].Direccion+"</ts><td>"+reg[i].RFC+"</td><td>"+reg[i].Telefono+"</  td><td>"+reg[i].Clasificacion+"</td><td>"+reg[i].Foto+"</td><td>"+reg[i].Latitud+"</td><td>"+reg[i].Longitud+"</td><tr>");
+                        }
+                        fila.append("</table>");
+					}
+				});
+				
+			});
+		});
+	</script>
+</head>
+<body>
+	<div data-role="page" id="Principal">
+		<div  data-role="header">
+			<p style="text-align: center;">CATALOGO DE SERVICIOS</p>	
+			<P style="text-align: center;">OPERACIONES</P>
+		</div>
+		<div data-role="content">
+		<ul data-role="listview">
+			<li><a href="#Registrar">Registrar Servicios</a></li>
+			<li><a href="#Consultar">Consultar Servicios</a></li>
+			<li><a href="#Actualizar">Actualizar Servicios</a></li>
+			<li><a href="#Eliminar">Eliminar Servicios</a></li>
+		</ul>
+		</div>		
+	</div>
+		<div data-role="page" id="Registrar" data-theme="a">
+			<div data-role="header">
+			<a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Principal</a>
+			<p style="text-align: center;">Registro de Servicios</p>
+		</div>
+		<div data-role="content">
+		<input type="text" id="Nombre" placeholder="Nombre del Servicio">
+		<input type="text" id="Direccion" placeholder="Dirección">
+		<input type="text" id="RFC" placeholder="RFC">
+		<input type="text" id="Telefono" placeholder="Telefono">
+
+		<select id="clasificacion">
+			<option value="Restaurante">Restaurante</option>
+			<option value="Zapateria">Zapatería</option>
+			<option value="Farmacia">Farmacia</option>
+		</select>			
+		<input type="button" id="btnFoto" value="Tomar Foto">	
+		<input type="button" id="btnCoordenadas" value="Obtener Coordenadas">	
+		<input type="text" id="lalitud" placeholder="Latitud">
+		<input type="text" id="longitud" placeholder="Longitud">
+		<input type="button" id="btnGuardar" value="Guardar Servicio">	
+		</div>	
+
+		<div data-role="footer">
+			<a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a>
+		</div>
+		</div>
+
+		<div data-role="page" id="Consultar">
+			<div data-role="header">
+			<p>Consultar Servicios</p>
+		</div>	
+		<div data-role="content">
+			<input type="button" id="btnConsultar" value="Consultar Todos los Servicios">
+			<div id="datosTodos">
+			</div>
+		</div>
+		<div data-role="footer">
+			<a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a>
+		</div>	
+		</div>
+
+		<div data-role="page" id="Actualizar">
+			<div data-role="header">
+			<a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Principal</a>
+			<p>Actualizar Servicios</p>
+		</div>			
+		</div>
+
+		<div data-role="page" id="Eliminar">
+			<div data-role="header">
+			<a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Principal</a>
+			<p>Eliminar Servicios</p>
+		</div>			
+		</div>
+
+	</body>
+</html>
